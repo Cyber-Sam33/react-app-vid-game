@@ -1,6 +1,7 @@
 import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
 import Alert from "./components/Alert";
+import Form from "./components/Form";
 import { useState } from "react";
 
 function App() {
@@ -16,12 +17,13 @@ function App() {
         heading="Cities"
         onSelectItem={handleSelectItem}
       /> */}
-      {alertVisble && (
+      {/* {alertVisble && (
         <Alert onClose={() => setAlertVisibility(false)}>Hey there!</Alert>
       )}
       <Button colour="primary" onClick={() => setAlertVisibility(true)}>
         My Button
-      </Button>
+      </Button> */}
+      <Form />
     </div>
   );
 }
