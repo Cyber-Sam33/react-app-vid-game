@@ -8,7 +8,7 @@ import ExpenseFilter from "./expense-tracker/components/ExpenseFilter";
 import ExpenseForm from "./expense-tracker/components/ExpenseForm";
 import categories from "./expense-tracker/categories";
 import ProductList from "./components/ProductList";
-import axios from "axios";
+import axios, { CanceledError } from "axios";
 
 interface User {
   id: number;
@@ -18,17 +18,33 @@ interface User {
 function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
+    setLoading(true);
     axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/Xusers")
-      .then((res) => setUsers(res.data))
-      .catch((err) => setError(err.message));
+      .get<User[]>("https://jsonplaceholder.typicode.com/users", {
+        signal: controller.signal,
+      })
+      .then((res) => {
+        setUsers(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+        setLoading(false);
+      });
+
+    return () => controller.abort();
   }, []);
 
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
+      {isLoading && <div className="spinner-border"></div>}
       <ul>
         {users.map((user) => (
           <li key={user.id}>{user.name}</li>
