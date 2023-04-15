@@ -74,7 +74,7 @@ function App() {
     setUsers(users.map((u) => (u.id === user.id ? updatedUser : u)));
     axios
       .patch(
-        "https://jsonplaceholder.typicode.com/Xusers/" + user.id,
+        "https://jsonplaceholder.typicode.com/users/" + user.id,
         updatedUser
       )
       .catch((err) => {
