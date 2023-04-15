@@ -52,10 +52,29 @@ function App() {
       });
   };
 
+  const addUser = () => {
+    const originalUsers = [...users];
+    // hard coded but would usually be received from form
+    const newUser = { id: 0, name: "Sam" };
+    setUsers([...users, newUser]);
+
+    axios
+      .post("https://jsonplaceholder.typicode.com/Xusers/", newUser)
+      //destructure the response object to grab 'data' and give it the alias 'savedUser'
+      .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUsers);
+      });
+  };
+
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
       {isLoading && <div className="spinner-border"></div>}
+      <button className="btn btn-primary mb-3" onClick={addUser}>
+        Add
+      </button>
       <ul className="list-group">
         {users.map((user) => (
           <li
